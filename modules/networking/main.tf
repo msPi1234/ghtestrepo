@@ -25,13 +25,12 @@ resource "azurerm_subnet" "additional" {
   address_prefixes     = each.value.address_prefixes
 }
 
-# Create Network Security Group for AKS (minimal configuration)
+# Create Network Security Group for AKS (minimal config - HTTPS only for cost optimization)
 resource "azurerm_network_security_group" "aks" {
   name                = var.nsg_name
   location            = var.location
   resource_group_name = var.resource_group_name
 
-  # Allow HTTPS inbound (essential for Kubernetes API access)
   security_rule {
     name                       = "AllowKubernetesAPI"
     priority                   = 100

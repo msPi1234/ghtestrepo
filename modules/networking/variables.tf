@@ -17,7 +17,7 @@ variable "vnet_name" {
 variable "address_space" {
   description = "Address space for the virtual network"
   type        = list(string)
-  default     = ["10.0.0.0/8"]
+  default     = ["10.0.0.0/16"]
 
   validation {
     condition     = alltrue([for cidr in var.address_space : can(cidrhost(cidr, 0))])
@@ -34,7 +34,7 @@ variable "aks_subnet_name" {
 variable "aks_subnet_prefix" {
   description = "Address prefix for AKS subnet"
   type        = list(string)
-  default     = ["10.1.0.0/16"]
+  default     = ["10.0.1.0/24"]
 
   validation {
     condition     = alltrue([for cidr in var.aks_subnet_prefix : can(cidrhost(cidr, 0))])
