@@ -137,7 +137,7 @@ variable "network_policy" {
 variable "service_cidr" {
   description = "CIDR for Kubernetes services"
   type        = string
-  default     = "10.0.0.0/16"
+  default     = "10.240.0.0/16" # Non-overlapping with node subnet 10.0.1.0/24
 
   validation {
     condition     = can(cidrhost(var.service_cidr, 0))
@@ -148,7 +148,7 @@ variable "service_cidr" {
 variable "dns_service_ip" {
   description = "IP address for DNS service"
   type        = string
-  default     = "10.0.0.10"
+  default     = "10.240.0.10" # Must be within service CIDR range
 }
 
 variable "enable_http_application_routing" {

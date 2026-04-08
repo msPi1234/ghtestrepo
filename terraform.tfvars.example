@@ -33,9 +33,9 @@ network_policy                  = "azure"                   # azure or calico
 enable_http_application_routing = false                     # false = saves costs
 enable_azure_policy             = false                     # false = saves costs
 
-# Service CIDR for Kubernetes
-service_cidr   = "10.0.0.0/16"
-dns_service_ip = "10.0.0.10"
+# Service CIDR for Kubernetes (must not overlap with node subnet 10.0.1.0/24)
+service_cidr   = "10.240.0.0/16"
+dns_service_ip = "10.240.0.10"
 
 # ============================================================================
 # Tags
