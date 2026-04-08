@@ -25,6 +25,6 @@ output "node_resource_group" {
 }
 
 output "kubelet_identity_principal_id" {
-  description = "Principal ID of the kubelet identity (for ACR pull permissions)"
-  value       = azurerm_kubernetes_cluster.main.kubelet_identity[0].object_id
+  description = "Principal ID of the kubelet identity (for ACR pull permissions). Returns empty string if using service principal auth."
+  value       = try(azurerm_kubernetes_cluster.main.kubelet_identity[0].object_id, "")
 }
