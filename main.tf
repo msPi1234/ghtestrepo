@@ -11,6 +11,4 @@ resource "azurerm_resource_group" "main" {
       CreatedDate = formatdate("YYYY-MM-DD", timestamp())
     }
   )
-
-  depends_on = []
 }
