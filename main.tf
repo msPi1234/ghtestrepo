@@ -68,7 +68,6 @@ module "aks" {
   network_policy                  = var.network_policy
   service_cidr                    = var.service_cidr
   dns_service_ip                  = var.dns_service_ip
-  docker_bridge_cidr              = var.docker_bridge_cidr
   enable_http_application_routing = var.enable_http_application_routing
   enable_azure_policy             = var.enable_azure_policy
   tags                            = local.common_tags

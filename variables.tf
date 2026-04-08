@@ -109,7 +109,7 @@ variable "default_node_pool_count" {
 variable "default_node_pool_vm_size" {
   description = "VM size for nodes in the default pool"
   type        = string
-  default     = "Standard_B1s" # Cheapest General Purpose VM
+  default     = "Standard_B2s" # Minimum size for AKS system node pool (2 cores, 4GB RAM)
 }
 
 variable "network_plugin" {
@@ -149,12 +149,6 @@ variable "dns_service_ip" {
   description = "IP address for DNS service"
   type        = string
   default     = "10.0.0.10"
-}
-
-variable "docker_bridge_cidr" {
-  description = "CIDR for Docker bridge"
-  type        = string
-  default     = "172.17.0.1/16"
 }
 
 variable "enable_http_application_routing" {

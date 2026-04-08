@@ -21,11 +21,10 @@ resource "azurerm_kubernetes_cluster" "main" {
   }
 
   network_profile {
-    network_plugin     = var.network_plugin
-    network_policy     = var.network_policy
-    service_cidr       = var.service_cidr
-    dns_service_ip     = var.dns_service_ip
-    docker_bridge_cidr = var.docker_bridge_cidr
+    network_plugin = var.network_plugin
+    network_policy = var.network_policy
+    service_cidr   = var.service_cidr
+    dns_service_ip = var.dns_service_ip
   }
 
   http_application_routing_enabled = var.enable_http_application_routing

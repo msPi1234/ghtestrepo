@@ -25,18 +25,17 @@ nsg_name            = "nsg-aks"
 
 cluster_name                    = "aks-demo"
 dns_prefix                      = "aksdemo"
-kubernetes_version              = null                    # null = latest version
-default_node_pool_count         = 1                       # Minimum = cheapest
-default_node_pool_vm_size       = "Standard_B1s"          # Cheapest VM tier
-network_plugin                  = "azure"                 # azure or kubenet
-network_policy                  = "azure"                 # azure or calico
-enable_http_application_routing = false                   # false = saves costs
-enable_azure_policy             = false                   # false = saves costs
+kubernetes_version              = null                      # null = latest version
+default_node_pool_count         = 1                         # Minimum nodes for cost efficiency
+default_node_pool_vm_size       = "Standard_B2s"            # Minimum for AKS system pool (2 cores, 4GB RAM)
+network_plugin                  = "azure"                   # azure or kubenet
+network_policy                  = "azure"                   # azure or calico
+enable_http_application_routing = false                     # false = saves costs
+enable_azure_policy             = false                     # false = saves costs
 
 # Service CIDR for Kubernetes
-service_cidr   = "10.240.0.0/16"
-dns_service_ip = "10.240.0.10"
-docker_bridge_cidr = "172.17.0.1/16"
+service_cidr   = "10.0.0.0/16"
+dns_service_ip = "10.0.0.10"
 
 # ============================================================================
 # Tags

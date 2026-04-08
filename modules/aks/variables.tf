@@ -111,7 +111,7 @@ variable "dns_service_ip" {
 }
 
 variable "docker_bridge_cidr" {
-  description = "CIDR for Docker bridge"
+  description = "CIDR for Docker bridge (deprecated - will be removed in azurerm 4.0)"
   type        = string
   default     = "172.17.0.1/16"
 }
