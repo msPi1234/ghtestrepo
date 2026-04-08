@@ -87,7 +87,8 @@ module "acr" {
   georeplications               = var.acr_georeplications
   network_rule_bypass_option    = var.acr_network_rule_bypass_option
   public_network_access_enabled = var.acr_public_network_access_enabled
-  aks_principal_id              = module.aks.kubelet_identity_principal_id
+  # Pass the AKS service principal ID for ACR pull permissions (AKS uses service principal auth)
+  aks_principal_id              = azuread_service_principal.aks.id
   enable_aks_push               = var.enable_aks_push_to_acr
   tags                          = local.common_tags
 
