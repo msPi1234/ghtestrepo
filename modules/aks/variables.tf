@@ -1,77 +1,13 @@
 variable "resource_group_name" {
-  description = "The name of the resource group"
+  description = "Name of the resource group"
   type        = string
-  default     = "rg-ghtestrepo"
-
-  validation {
-    condition     = length(var.resource_group_name) >= 1 && length(var.resource_group_name) <= 90 && can(regex("^[a-zA-Z0-9._()-]+$", var.resource_group_name))
-    error_message = "Resource group name must be 1-90 characters and contain only alphanumeric characters, hyphens, underscores, periods, and parentheses."
-  }
 }
 
-variable "resource_group_location" {
-  description = "The Azure region where the resource group will be created"
+variable "location" {
+  description = "Azure region for the AKS cluster"
   type        = string
-  default     = "westeurope"
-
-  validation {
-    condition     = can(regex("^[a-z0-9]+$", replace(var.resource_group_location, " ", "")))
-    error_message = "Location must be a valid Azure region."
-  }
 }
 
-variable "environment" {
-  description = "The environment name (e.g., dev, staging, prod)"
-  type        = string
-  default     = "dev"
-
-  validation {
-    condition     = contains(["dev", "staging", "prod"], var.environment)
-    error_message = "Environment must be one of: dev, staging, prod."
-  }
-}
-
-variable "common_tags" {
-  description = "Common tags to apply to all resources"
-  type        = map(string)
-  default = {
-    Project = "Terraform-Demo"
-    Owner   = "Infrastructure"
-  }
-}
-
-# Networking Variables
-variable "vnet_name" {
-  description = "Name of the virtual network"
-  type        = string
-  default     = "vnet-aks"
-}
-
-variable "address_space" {
-  description = "Address space for the virtual network"
-  type        = list(string)
-  default     = ["10.0.0.0/16"] # Smaller, more efficient
-}
-
-variable "aks_subnet_name" {
-  description = "Name of the AKS subnet"
-  type        = string
-  default     = "subnet-aks"
-}
-
-variable "aks_subnet_prefix" {
-  description = "Address prefix for AKS subnet"
-  type        = list(string)
-  default     = ["10.0.1.0/24"] # Smaller subnet
-}
-
-variable "nsg_name" {
-  description = "Name of the network security group"
-  type        = string
-  default     = "nsg-aks"
-}
-
-# AKS Variables
 variable "cluster_name" {
   description = "Name of the AKS cluster"
   type        = string
@@ -90,15 +26,26 @@ variable "dns_prefix" {
 }
 
 variable "kubernetes_version" {
-  description = "Version of Kubernetes to use (leave null for latest)"
+  description = "Version of Kubernetes to use"
   type        = string
   default     = null
+}
+
+variable "subnet_id" {
+  description = "ID of the subnet for the AKS cluster"
+  type        = string
+}
+
+variable "default_node_pool_name" {
+  description = "Name of the default node pool"
+  type        = string
+  default     = "default"
 }
 
 variable "default_node_pool_count" {
   description = "Number of nodes in the default node pool"
   type        = number
-  default     = 1 # Minimum = cheapest
+  default     = 1
 
   validation {
     condition     = var.default_node_pool_count >= 1 && var.default_node_pool_count <= 100
@@ -109,7 +56,19 @@ variable "default_node_pool_count" {
 variable "default_node_pool_vm_size" {
   description = "VM size for nodes in the default pool"
   type        = string
-  default     = "Standard_B1s" # Cheapest General Purpose VM
+  default     = "Standard_B1s"
+}
+
+variable "client_id" {
+  description = "Client ID of the Service Principal for AKS"
+  type        = string
+  sensitive   = true
+}
+
+variable "client_secret" {
+  description = "Client Secret of the Service Principal for AKS"
+  type        = string
+  sensitive   = true
 }
 
 variable "network_plugin" {
@@ -160,11 +119,27 @@ variable "docker_bridge_cidr" {
 variable "enable_http_application_routing" {
   description = "Enable HTTP application routing"
   type        = bool
-  default     = false # Disabled to save costs
+  default     = false
 }
 
 variable "enable_azure_policy" {
   description = "Enable Azure Policy for AKS"
   type        = bool
-  default     = false # Disabled to save costs
+  default     = false
+}
+
+variable "additional_node_pools" {
+  description = "Additional node pools to create"
+  type = map(object({
+    name       = string
+    node_count = number
+    vm_size    = string
+  }))
+  default = {}
+}
+
+variable "tags" {
+  description = "Tags to apply to resources"
+  type        = map(string)
+  default     = {}
 }

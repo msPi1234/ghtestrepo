@@ -1,0 +1,73 @@
+# Cost-Optimized AKS Configuration Example
+# Copy this file to terraform.tfvars and customize values as needed
+
+# ============================================================================
+# Basic Configuration
+# ============================================================================
+
+resource_group_name      = "rg-aks-demo"
+resource_group_location  = "westeurope"  # Change to your preferred region
+environment              = "dev"         # dev, staging, or prod
+
+# ============================================================================
+# Network Configuration
+# ============================================================================
+
+vnet_name           = "vnet-aks"
+address_space       = ["10.0.0.0/16"]      # Virtual network address space
+aks_subnet_name     = "subnet-aks"
+aks_subnet_prefix   = ["10.0.1.0/24"]      # AKS node subnet
+nsg_name            = "nsg-aks"
+
+# ============================================================================
+# AKS Cluster Configuration (Cost-Optimized)
+# ============================================================================
+
+cluster_name                    = "aks-demo"
+dns_prefix                      = "aksdemo"
+kubernetes_version              = null                    # null = latest version
+default_node_pool_count         = 1                       # Minimum = cheapest
+default_node_pool_vm_size       = "Standard_B1s"          # Cheapest VM tier
+network_plugin                  = "azure"                 # azure or kubenet
+network_policy                  = "azure"                 # azure or calico
+enable_http_application_routing = false                   # false = saves costs
+enable_azure_policy             = false                   # false = saves costs
+
+# Service CIDR for Kubernetes
+service_cidr   = "10.240.0.0/16"
+dns_service_ip = "10.240.0.10"
+docker_bridge_cidr = "172.17.0.1/16"
+
+# ============================================================================
+# Tags
+# ============================================================================
+
+common_tags = {
+  Project     = "AKS-Demo"
+  Owner       = "Infrastructure"
+  CostCenter  = "Dev"
+  ManagedBy   = "Terraform"
+}
+
+# ============================================================================
+# COST OPTIMIZATION TIPS
+# ============================================================================
+# 
+# Current Setup (~$25/month):
+#   - 1 x Standard_B1s node: ~$7/month
+#   - AKS Management: free (within free tier limits)
+#   - Data & Storage: ~$15/month
+#
+# To Reduce Costs Further:
+#   1. Use Azure Spot VMs for non-critical workloads (70% cheaper)
+#   2. Shutdown cluster during non-work hours
+#   3. Use dev/test subscriptions for evaluation
+#   4. Monitor actual costs in Azure Cost Management portal
+#
+# To Scale Up When Needed:
+#   1. Increase default_node_pool_count to 2-3 for HA
+#   2. Change to Standard_B2s or D2s_v3 for production workloads
+#   3. Enable Azure Policy for compliance
+#   4. Add additional node pools for specific workloads
+#
+# ============================================================================
