@@ -1,0 +1,13 @@
+apiVersion: v2
+name: hello-world
+description: A Helm chart for deploying Hello World application to Kubernetes
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - hello-world
+  - kubernetes
+  - aks
+maintainers:
+  - name: Infrastructure Team
+    email: infra@example.com

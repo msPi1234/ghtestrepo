@@ -24,3 +24,23 @@ override.tf.json
 *.log
 crash.log
 crash.*.log
+
+# Node.js
+app/node_modules/
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Helm
+helm/hello-world/Chart.lock
+
+# Build artifacts
+dist/
+build/
+*.tar.gz

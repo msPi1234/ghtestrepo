@@ -1,0 +1,64 @@
+# Development/Testing Helm Values
+# Used for quick testing and development
+
+replicaCount: 1
+
+image:
+  registry: ghtestreporegistry.azurecr.io
+  repository: ghtestreporegistry.azurecr.io/hello-world
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+serviceAccount:
+  create: true
+  name: ""
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 3000
+  annotations: {}
+
+ingress:
+  enabled: false
+
+resources:
+  limits:
+    cpu: 250m
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 32Mi
+
+autoscaling:
+  enabled: false  # Disabled for dev to save resources
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 70
+
+livenessProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 2
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /ready
+    port: http
+  initialDelaySeconds: 2
+  periodSeconds: 5
+  timeoutSeconds: 2
+  failureThreshold: 2
+
+env:
+  - name: ENVIRONMENT
+    value: "development"
+  - name: NODE_ENV
+    value: "development"
+
+podDisruptionBudget:
+  enabled: false  # Disabled for single dev pod
