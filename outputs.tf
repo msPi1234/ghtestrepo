@@ -71,3 +71,53 @@ output "service_principal_display_name" {
   description = "Display name of the AKS Service Principal"
   value       = azuread_service_principal.aks.display_name
 }
+
+# ============================================================================
+# ACR (Azure Container Registry) Outputs
+# ============================================================================
+
+output "acr_registry_id" {
+  description = "ID of the Azure Container Registry"
+  value       = module.acr.registry_id
+}
+
+output "acr_registry_name" {
+  description = "Name of the Azure Container Registry"
+  value       = module.acr.registry_name
+}
+
+output "acr_login_server" {
+  description = "The login server URL for the container registry"
+  value       = module.acr.login_server
+}
+
+output "acr_fqdn" {
+  description = "Fully Qualified Domain Name (FQDN) of the registry"
+  value       = module.acr.registry_fqdn
+}
+
+output "acr_admin_username" {
+  description = "Admin username for the container registry (if admin enabled)"
+  value       = module.acr.admin_username
+  sensitive   = true
+}
+
+output "acr_admin_password" {
+  description = "Admin password for the container registry (if admin enabled)"
+  value       = module.acr.admin_password
+  sensitive   = true
+}
+
+# ============================================================================
+# AKS-ACR Integration Info
+# ============================================================================
+
+output "aks_integration_info" {
+  description = "Information for integrating AKS with ACR"
+  value = {
+    aks_cluster_name   = module.aks.cluster_name
+    acr_login_server   = module.acr.login_server
+    integration_method = "Managed Identity (automatic via AcrPull role)"
+    usage_example      = "kubectl create deployment app --image=${module.acr.login_server}/myimage:latest"
+  }
+}

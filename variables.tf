@@ -162,3 +162,68 @@ variable "enable_azure_policy" {
   type        = bool
   default     = false # Disabled to save costs
 }
+
+# ============================================================================
+# ACR (Azure Container Registry) Variables
+# ============================================================================
+
+variable "registry_name" {
+  description = "Name of the Azure Container Registry (must be globally unique, alphanumeric only)"
+  type        = string
+  default     = "ghtestreporegistry" # Change to your unique name
+
+  validation {
+    condition     = length(var.registry_name) >= 5 && length(var.registry_name) <= 50 && can(regex("^[a-z0-9]+$", var.registry_name))
+    error_message = "Registry name must be 5-50 characters, lowercase alphanumeric only, and globally unique."
+  }
+}
+
+variable "acr_sku" {
+  description = "SKU of the Azure Container Registry (Basic, Standard, Premium)"
+  type        = string
+  default     = "Basic" # Cheapest tier - ideal for cost optimization
+
+  validation {
+    condition     = contains(["Basic", "Standard", "Premium"], var.acr_sku)
+    error_message = "SKU must be one of: Basic, Standard, Premium."
+  }
+}
+
+variable "acr_admin_enabled" {
+  description = "Enable admin user for container registry"
+  type        = bool
+  default     = false # Security best practice - use RBAC instead
+}
+
+variable "acr_georeplications" {
+  description = "List of geo-replication configurations for high availability"
+  type = list(object({
+    location                  = string
+    zone_redundancy_enabled   = optional(bool, false)
+    regional_endpoint_enabled = optional(bool, false)
+  }))
+  default = [] # No geo-replication by default (cost optimization)
+}
+
+variable "acr_network_rule_bypass_option" {
+  description = "Whether to allow bypass of network rules (AzureServices, None)"
+  type        = string
+  default     = "AzureServices"
+
+  validation {
+    condition     = contains(["AzureServices", "None"], var.acr_network_rule_bypass_option)
+    error_message = "Must be either AzureServices or None."
+  }
+}
+
+variable "acr_public_network_access_enabled" {
+  description = "Whether public network access is allowed for the registry"
+  type        = bool
+  default     = true # Allow public access (restrict via network rules if needed)
+}
+
+variable "enable_aks_push_to_acr" {
+  description = "Enable AKS cluster to push images to ACR (AcrPush role)"
+  type        = bool
+  default     = false # Read-only by default for security
+}

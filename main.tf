@@ -74,3 +74,22 @@ module "aks" {
 
   depends_on = [azurerm_role_assignment.aks]
 }
+
+# ACR Module (Container Registry)
+module "acr" {
+  source = "./modules/acr"
+
+  resource_group_name           = azurerm_resource_group.main.name
+  location                      = azurerm_resource_group.main.location
+  registry_name                 = var.registry_name
+  sku                           = var.acr_sku
+  admin_enabled                 = var.acr_admin_enabled
+  georeplications               = var.acr_georeplications
+  network_rule_bypass_option    = var.acr_network_rule_bypass_option
+  public_network_access_enabled = var.acr_public_network_access_enabled
+  aks_principal_id              = module.aks.kubelet_identity_principal_id
+  enable_aks_push               = var.enable_aks_push_to_acr
+  tags                          = local.common_tags
+
+  depends_on = [module.aks]
+}
